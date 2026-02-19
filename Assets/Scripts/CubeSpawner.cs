@@ -15,6 +15,8 @@ public class CubeSpawner : MonoBehaviour
     private int _poolCapacity = 25;
     private int _poolMaxSize = 25;
 
+    private Renderer _basicRenderer;
+
     private Coroutine _coroutine;
 
     private ObjectPool<GameObject> _pool;
@@ -29,11 +31,12 @@ public class CubeSpawner : MonoBehaviour
             collectionCheck: true,
             defaultCapacity: _poolCapacity,
             maxSize: _poolMaxSize);
+
+        _basicRenderer = GetComponent<Renderer>();
     }
 
     private void OnEnable()
     {
-        _prefab.GetComponent<CollisionDetector>().CubeTouchedPlatform += StartCubeLife;
     }
 
     private void Start()
@@ -66,6 +69,11 @@ public class CubeSpawner : MonoBehaviour
     private IEnumerator WaitRandomTime(Renderer renderer)
     {
         yield return new WaitForSeconds(UnityEngine.Random.Range(_minLifeTime, _maxLifeTime));
-        _pool.Release(renderer.gameObject);
+
+        GameObject cube = renderer.gameObject;
+        cube.GetComponent<CollisionDetector>().CubeTouchedPlatform -= StartCubeLife;
+        renderer = _basicRenderer;
+
+        _pool.Release(cube);
     }
 }
