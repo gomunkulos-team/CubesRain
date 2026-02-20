@@ -1,29 +1,30 @@
 using UnityEngine;
 
-[RequireComponent(typeof(CollisionDetector))]
+[RequireComponent(typeof(Cube))]
 
 public class RandomColor : MonoBehaviour
 {
-    private CollisionDetector _collisionDetector;
+    private Cube _cube;
 
     private void Awake()
     {
-        _collisionDetector = GetComponent<CollisionDetector>();
+        _cube = GetComponent<Cube>();
     }
 
     public void OnEnable()
     {
-        _collisionDetector.CubeTouchedPlatform += ChangeColor;
+        _cube.CubeTouchedPlatform += ChangeColor;
     }
 
     public void OnDisable()
     {
-        _collisionDetector.CubeTouchedPlatform -= ChangeColor;
+        _cube.CubeTouchedPlatform -= ChangeColor;
     }
 
-    private void ChangeColor(Renderer renderer)
+    private void ChangeColor(Cube cube)
     {
-        renderer.material.color = Random.ColorHSV(0f, 1f, 0.7f, 1f, 0.7f, 1f);
-        _collisionDetector.CubeTouchedPlatform -= ChangeColor;
+        Renderer cubeRenderer = cube.GetComponent<Renderer>();
+        cubeRenderer.material.color = Random.ColorHSV(0f, 1f, 0.7f, 1f, 0.7f, 1f);
+        _cube.CubeTouchedPlatform -= ChangeColor;
     }
 }

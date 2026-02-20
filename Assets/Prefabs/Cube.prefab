@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 2718898833480520957}
   - component: {fileID: 1110503900898696177}
   - component: {fileID: 37616498322974473}
-  - component: {fileID: 1342635902741469202}
-  - component: {fileID: 8633096951704451439}
+  - component: {fileID: 8947268134746242778}
+  - component: {fileID: 3423265560599270596}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -123,7 +123,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 506727628163119438}
   serializedVersion: 5
-  m_Mass: 2
+  m_Mass: 4
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -142,7 +142,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &1342635902741469202
+--- !u!114 &8947268134746242778
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -151,10 +151,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 506727628163119438}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1087179bc9c4db04f96f0eef62786370, type: 3}
+  m_Script: {fileID: 11500000, guid: b292015d808342b40ae5ed4846fbf93b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CollisionDetector
---- !u!114 &8633096951704451439
+  m_EditorClassIdentifier: Assembly-CSharp::Cube
+--- !u!114 &3423265560599270596
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

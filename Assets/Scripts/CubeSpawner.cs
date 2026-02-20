@@ -1,42 +1,40 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
 
 public class CubeSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject _prefab;
+    [SerializeField] private Cube _prefab;
     [SerializeField] private float _repeateRate = 0.3f;
     [SerializeField] private float _positionY = 50f;
+    [SerializeField] private Platform _platform;
 
-    private float _minCoordinate = -90;
-    private float _maxCoordinate = 90;
-    private float _minLifeTime = 2;
-    private float _maxLifeTime = 5;
+    private float _minCoordinateX;
+    private float _maxCoordinateX;
+    private float _minCoordinateZ;
+    private float _maxCoordinateZ;
+    private float _indent = 1;
+
     private int _poolCapacity = 25;
-    private int _poolMaxSize = 25;
+    private int _poolMaxSize = 30;
 
-    private Renderer _basicRenderer;
-
-    private Coroutine _coroutine;
-
-    private ObjectPool<GameObject> _pool;
+    private ObjectPool<Cube> _pool;
 
     private void Awake()
     {
-        _pool = new ObjectPool<GameObject>(
+        _pool = new ObjectPool<Cube>(
             createFunc: () => Instantiate(_prefab),
             actionOnGet: (cube) => ActionOnGet(cube),
-            actionOnRelease: (cube) => cube.SetActive(false),
+            actionOnRelease: (cube) => cube.gameObject.SetActive(false),
             actionOnDestroy: (cube) => Destroy(cube.gameObject),
             collectionCheck: true,
             defaultCapacity: _poolCapacity,
             maxSize: _poolMaxSize);
 
-        _basicRenderer = GetComponent<Renderer>();
-    }
 
-    private void OnEnable()
-    {
+        _minCoordinateX = _platform.MinPositionX + _indent;
+        _maxCoordinateX = _platform.MaxPositionX - _indent;
+        _minCoordinateZ = _platform.MinPositionZ + _indent;
+        _maxCoordinateZ = _platform.MaxPositionZ - _indent;
     }
 
     private void Start()
@@ -44,16 +42,16 @@ public class CubeSpawner : MonoBehaviour
         InvokeRepeating(nameof(GetCube), 0.0f, _repeateRate);
     }
 
-    private void ActionOnGet(GameObject cube)
+    private void ActionOnGet(Cube cube)
     {
-        float positionX = UnityEngine.Random.Range(_minCoordinate, _maxCoordinate);
-        float positionZ = UnityEngine.Random.Range(_minCoordinate, _maxCoordinate);
+        float positionX = Random.Range(_minCoordinateX, _maxCoordinateX);
+        float positionZ = Random.Range(_minCoordinateZ, _maxCoordinateZ);
 
         Vector3 position = new Vector3(positionX, _positionY, positionZ);
 
         cube.transform.position = position;
-        cube.SetActive(true);
-        cube.GetComponent<CollisionDetector>().CubeTouchedPlatform += StartCubeLife;
+        cube.gameObject.SetActive(true);
+        cube.CubeTimeIsOver += ReleaseCube;
     }
 
     private void GetCube()
@@ -61,19 +59,9 @@ public class CubeSpawner : MonoBehaviour
         _pool.Get();
     }
 
-    private void StartCubeLife(Renderer renderer)
+    private void ReleaseCube(Cube cube)
     {
-        _coroutine = StartCoroutine(WaitRandomTime(renderer));
-    }
-
-    private IEnumerator WaitRandomTime(Renderer renderer)
-    {
-        yield return new WaitForSeconds(UnityEngine.Random.Range(_minLifeTime, _maxLifeTime));
-
-        GameObject cube = renderer.gameObject;
-        cube.GetComponent<CollisionDetector>().CubeTouchedPlatform -= StartCubeLife;
-        renderer = _basicRenderer;
-
+        cube.CubeTimeIsOver -= ReleaseCube;
         _pool.Release(cube);
     }
 }
