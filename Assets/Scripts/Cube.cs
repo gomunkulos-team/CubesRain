@@ -29,9 +29,7 @@ public class Cube : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Platform platform;
-
-        if (collision.gameObject.TryGetComponent<Platform>(out platform))
+        if (collision.gameObject.TryGetComponent<Platform>(out _))
         {
             CubeTouchedPlatform?.Invoke(this);
             StartCoroutine(StartDeathCount());

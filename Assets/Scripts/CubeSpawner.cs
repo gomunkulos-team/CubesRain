@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -12,7 +13,7 @@ public class CubeSpawner : MonoBehaviour
     private float _maxCoordinateX;
     private float _minCoordinateZ;
     private float _maxCoordinateZ;
-    private float _indent = 1;
+    private float _indent = 2;
 
     private int _poolCapacity = 25;
     private int _poolMaxSize = 30;
@@ -23,7 +24,7 @@ public class CubeSpawner : MonoBehaviour
     {
         _pool = new ObjectPool<Cube>(
             createFunc: () => Instantiate(_prefab),
-            actionOnGet: (cube) => ActionOnGet(cube),
+            actionOnGet: (cube) => SpawnCube(cube),
             actionOnRelease: (cube) => cube.gameObject.SetActive(false),
             actionOnDestroy: (cube) => Destroy(cube.gameObject),
             collectionCheck: true,
@@ -39,10 +40,10 @@ public class CubeSpawner : MonoBehaviour
 
     private void Start()
     {
-        InvokeRepeating(nameof(GetCube), 0.0f, _repeateRate);
+        StartCoroutine(StartRepeatSpawn(_repeateRate));
     }
 
-    private void ActionOnGet(Cube cube)
+    private void SpawnCube(Cube cube)
     {
         float positionX = Random.Range(_minCoordinateX, _maxCoordinateX);
         float positionZ = Random.Range(_minCoordinateZ, _maxCoordinateZ);
@@ -63,5 +64,14 @@ public class CubeSpawner : MonoBehaviour
     {
         cube.CubeTimeIsOver -= ReleaseCube;
         _pool.Release(cube);
+    }
+
+    private IEnumerator StartRepeatSpawn(float time)
+    {
+        while (enabled)
+        {
+            yield return new WaitForSeconds(time);
+            GetCube();
+        }
     }
 }

@@ -23,8 +23,10 @@ public class RandomColor : MonoBehaviour
 
     private void ChangeColor(Cube cube)
     {
-        Renderer cubeRenderer = cube.GetComponent<Renderer>();
-        cubeRenderer.material.color = Random.ColorHSV(0f, 1f, 0.7f, 1f, 0.7f, 1f);
-        _cube.CubeTouchedPlatform -= ChangeColor;
+        if (cube.TryGetComponent(out Renderer cubeRenderer))
+        {
+            cubeRenderer.material.color = Random.ColorHSV(0f, 1f, 0.7f, 1f, 0.7f, 1f);
+            _cube.CubeTouchedPlatform -= ChangeColor;
+        }
     }
 }
