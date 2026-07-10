@@ -2,48 +2,31 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class CubeSpawner : MonoBehaviour
+public class CubeSpawner : GenericSpawner<Cube>
 {
-    [SerializeField] private Cube _prefab;
-    [SerializeField] private float _repeateRate = 0.3f;
-    [SerializeField] private float _positionY = 50f;
     [SerializeField] private Platform _platform;
+
+    private float _repeateRate = 0.3f;
+    private float _positionY = 50f;
 
     private float _minCoordinateX;
     private float _maxCoordinateX;
     private float _minCoordinateZ;
     private float _maxCoordinateZ;
+
     private float _indent = 2;
 
-    private int _poolCapacity = 25;
-    private int _poolMaxSize = 30;
-
-    private ObjectPool<Cube> _pool;
-
-    private void Awake()
+    private void Start()
     {
-        _pool = new ObjectPool<Cube>(
-            createFunc: () => Instantiate(_prefab),
-            actionOnGet: (cube) => SpawnCube(cube),
-            actionOnRelease: (cube) => cube.gameObject.SetActive(false),
-            actionOnDestroy: (cube) => Destroy(cube.gameObject),
-            collectionCheck: true,
-            defaultCapacity: _poolCapacity,
-            maxSize: _poolMaxSize);
-
-
         _minCoordinateX = _platform.MinPositionX + _indent;
         _maxCoordinateX = _platform.MaxPositionX - _indent;
         _minCoordinateZ = _platform.MinPositionZ + _indent;
         _maxCoordinateZ = _platform.MaxPositionZ - _indent;
+
+       StartRepeatSpawn(_repeateRate);
     }
 
-    private void Start()
-    {
-        StartCoroutine(StartRepeatSpawn(_repeateRate));
-    }
-
-    private void SpawnCube(Cube cube)
+    protected override void Spawn(Cube cube)
     {
         float positionX = Random.Range(_minCoordinateX, _maxCoordinateX);
         float positionZ = Random.Range(_minCoordinateZ, _maxCoordinateZ);
@@ -55,23 +38,20 @@ public class CubeSpawner : MonoBehaviour
         cube.CubeTimeIsOver += ReleaseCube;
     }
 
-    private void GetCube()
-    {
-        _pool.Get();
-    }
-
     private void ReleaseCube(Cube cube)
     {
         cube.CubeTimeIsOver -= ReleaseCube;
-        _pool.Release(cube);
+        Release(cube);
     }
 
     private IEnumerator StartRepeatSpawn(float time)
     {
+        WaitForSeconds wait = new WaitForSeconds(time);
+
         while (enabled)
         {
-            yield return new WaitForSeconds(time);
-            GetCube();
+            yield return wait;
+            Get();
         }
     }
 }
