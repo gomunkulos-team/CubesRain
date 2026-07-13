@@ -23,7 +23,7 @@ public class CubeSpawner : GenericSpawner<Cube>
         _minCoordinateZ = _platform.MinPositionZ + _indent;
         _maxCoordinateZ = _platform.MaxPositionZ - _indent;
 
-       StartRepeatSpawn(_repeateRate);
+       StartCoroutine(StartRepeatSpawn(_repeateRate));
     }
 
     protected override void Spawn(Cube cube)

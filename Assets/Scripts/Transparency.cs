@@ -24,7 +24,7 @@ public class Transparency : MonoBehaviour
 
     public void FaidInTime(float time)
     {
-        StartFaiding(time);
+        StartCoroutine(StartFaiding(time));
     }
 
     private void SetAlpha(float alpha)

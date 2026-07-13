@@ -33,7 +33,7 @@ public class Bomb : MonoBehaviour
 
         float timer = UnityEngine.Random.Range(_minLifeTime, _maxLifeTime);
 
-        StartExplosionCount(timer);
+        StartCoroutine(StartExplosionCount(timer));
         _transparency.FaidInTime(timer);
     }
 
