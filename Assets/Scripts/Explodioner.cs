@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class Explodioner : MonoBehaviour
 {
-    private float _explosionForce = 10;
-    private float _explosionRadius = 20;
+    private float _explosionForce = 100;
+    private float _explosionRadius = 500;
 
     private List<Rigidbody> _rigidbodyList;
 

@@ -1,10 +1,12 @@
+using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Pool;
 
 public class CubeSpawner : GenericSpawner<Cube>
 {
     [SerializeField] private Platform _platform;
+
+    public event Action<Transform> CubeReleased;
 
     private float _repeateRate = 0.3f;
     private float _positionY = 50f;
@@ -28,8 +30,8 @@ public class CubeSpawner : GenericSpawner<Cube>
 
     protected override void Spawn(Cube cube)
     {
-        float positionX = Random.Range(_minCoordinateX, _maxCoordinateX);
-        float positionZ = Random.Range(_minCoordinateZ, _maxCoordinateZ);
+        float positionX = UnityEngine.Random.Range(_minCoordinateX, _maxCoordinateX);
+        float positionZ = UnityEngine.Random.Range(_minCoordinateZ, _maxCoordinateZ);
 
         Vector3 position = new Vector3(positionX, _positionY, positionZ);
 
@@ -41,6 +43,7 @@ public class CubeSpawner : GenericSpawner<Cube>
     private void ReleaseCube(Cube cube)
     {
         cube.CubeTimeIsOver -= ReleaseCube;
+        GetCubePosition(cube);
         Release(cube);
     }
 
@@ -53,5 +56,10 @@ public class CubeSpawner : GenericSpawner<Cube>
             yield return wait;
             Get();
         }
+    }
+
+    private void GetCubePosition(Cube cube)
+    {
+        CubeReleased?.Invoke(cube.transform);
     }
 }

@@ -2,21 +2,33 @@ using UnityEngine;
 
 public class BombSpawner : GenericSpawner<Bomb>
 {
-    [SerializeField] Cube _cubePrefab;
+    [SerializeField] CubeSpawner _cubeSpawner;
 
     private void OnEnable()
     {
-        _cubePrefab.CubeTimeIsOver += SetPosition;
+        _cubeSpawner.CubeReleased += SetPosition;
+    }
+
+    private void OnDisable()
+    {
+        _cubeSpawner.CubeReleased -= SetPosition;
     }
 
     protected override void Spawn(Bomb bomb)
     {
         base.Spawn(bomb);
+        bomb.TimeIsOver += ReleaseBomb;
     }
 
-    private void SetPosition(Cube cube)
+    private void SetPosition(Transform cubePosition)
     {
         Bomb bomb = GetObject();
-        _cubePrefab.transform.position = cube.transform.position;
+        bomb.transform.position = cubePosition.position;
+    }
+
+    private void ReleaseBomb(Bomb bomb)
+    {
+        bomb.TimeIsOver -= ReleaseBomb;
+        Release(bomb);
     }
 }
