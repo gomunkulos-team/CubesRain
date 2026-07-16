@@ -7,14 +7,21 @@ using UnityEngine;
 public class Transparency : MonoBehaviour
 {
     private Renderer _renderer;
+    private Material _material;
 
     private float _minAlpha = 0;
     private float _maxAlpha = 1;
-    private float _deltaTime = 0.1f;
+    private float _deltaTime = 0.5f;
 
     private void Awake()
     {
         _renderer = GetComponent<Renderer>();
+
+        if (_renderer.material != null)
+        {
+            _material = Instantiate(_renderer.material);
+            _renderer.material = _material;
+        }
     }
 
     private void OnEnable()
