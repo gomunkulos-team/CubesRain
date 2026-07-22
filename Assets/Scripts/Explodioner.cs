@@ -1,20 +1,25 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Explodioner : MonoBehaviour
 {
-    private float _explosionForce = 20;
+    private float _explosionForce = 100f;
     private float _explosionRadius = 50;
 
     private List<Rigidbody> _rigidbodyList;
 
     public void Explode()
     {
+        Debug.Log("BAM");
+
         List<Rigidbody> cubeList = GetRigidbodies();
+
+        Debug.Log("Количество затронутых кубов: " + cubeList.Count);
 
         foreach (Rigidbody body in cubeList)
         {
-            body.AddExplosionForce(_explosionForce, transform.position, _explosionRadius);
+            body.AddExplosionForce(_explosionForce, transform.position, _explosionForce, 1.1f, ForceMode.Impulse);
         }
     }
 
