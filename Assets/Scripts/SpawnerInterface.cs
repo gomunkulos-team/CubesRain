@@ -3,38 +3,46 @@ using UnityEngine;
 
 public class SpawnerInterface : MonoBehaviour
 {
-    [SerializeField] GenericSpawner<MonoBehaviour> _genericSpawner;
+    [SerializeField] private EventForSpawners _spawner;
 
-    [SerializeField] TextMeshProUGUI _numberAllTimeSpawn;
-    [SerializeField] TextMeshProUGUI _numberObjectsCreated;
-    [SerializeField] TextMeshProUGUI _numberActiveObjects;
+    [SerializeField] private TextMeshProUGUI _numberAllTimeSpawn;
+    [SerializeField] private TextMeshProUGUI _numberObjectsCreated;
+    [SerializeField] private TextMeshProUGUI _numberActiveObjects;
+
+    private string _textAllTime = "All Time: ";
+    private string _textCreated = "Created: ";
+    private string _textActive = "Active: ";
 
     private void OnEnable()
     {
-        _genericSpawner.AllTimeSpawnedObjectChanched += UpdateAllTimeSpawnNumber;
-        _genericSpawner.CreatedObjectChanched += UpdateObjectCreatedNumber;
-        _genericSpawner.ActiveObjectChanched += UpdateActiveObjects;
+        if (_spawner == null) return;
+
+        _spawner.AllTimeSpawnedObjectChanched += UpdateAllTimeSpawnNumber;
+        _spawner.CreatedObjectChanched += UpdateObjectCreatedNumber;
+        _spawner.ActiveObjectChanched += UpdateActiveObjects;
     }
 
     private void OnDisable()
     {
-        _genericSpawner.AllTimeSpawnedObjectChanched -= UpdateAllTimeSpawnNumber;
-        _genericSpawner.CreatedObjectChanched -= UpdateObjectCreatedNumber;
-        _genericSpawner.ActiveObjectChanched -= UpdateActiveObjects;
+        if (_spawner == null) return;
+
+        _spawner.AllTimeSpawnedObjectChanched -= UpdateAllTimeSpawnNumber;
+        _spawner.CreatedObjectChanched -= UpdateObjectCreatedNumber;
+        _spawner.ActiveObjectChanched -= UpdateActiveObjects;
     }
 
     private void UpdateAllTimeSpawnNumber(int number)
     {
-        _numberAllTimeSpawn.text = number.ToString();
+        _numberAllTimeSpawn.text = _textAllTime + number.ToString();
     }
 
     private void UpdateObjectCreatedNumber(int number)
     {
-        _numberObjectsCreated.text = number.ToString();
+        _numberObjectsCreated.text = _textCreated + number.ToString();
     }
 
     private void UpdateActiveObjects(int number)
     {
-        _numberActiveObjects.text = number.ToString();
+        _numberActiveObjects.text = _textActive + number.ToString();
     }
 }

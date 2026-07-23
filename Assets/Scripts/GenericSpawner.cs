@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class GenericSpawner<T> : MonoBehaviour where T : MonoBehaviour
+public class GenericSpawner<T> : EventForSpawners where T : MonoBehaviour
 {
     [SerializeField] private T _prefab;
 
@@ -12,9 +12,9 @@ public class GenericSpawner<T> : MonoBehaviour where T : MonoBehaviour
     private int _poolMaxSize = 30;
     private int _allTimeObjectSpawned = 0;
 
-    public event Action<int> AllTimeSpawnedObjectChanched;
-    public event Action<int> CreatedObjectChanched;
-    public event Action<int> ActiveObjectChanched;
+    public override event Action<int> AllTimeSpawnedObjectChanched;
+    public override event Action<int> CreatedObjectChanched;
+    public override event Action<int> ActiveObjectChanched;
 
     private void Awake()
     {
@@ -22,7 +22,7 @@ public class GenericSpawner<T> : MonoBehaviour where T : MonoBehaviour
             createFunc: () => Instantiate(_prefab),
             actionOnGet: (@object) => Spawn(@object),
             actionOnRelease: (@object) => @object.gameObject.SetActive(false),
-            actionOnDestroy: (cube) => Destroy(cube.gameObject),
+            actionOnDestroy: (obj) => Destroy(obj.gameObject),
             collectionCheck: true,
             defaultCapacity: _poolCapacity,
             maxSize: _poolMaxSize);

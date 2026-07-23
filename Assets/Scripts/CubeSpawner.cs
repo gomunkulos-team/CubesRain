@@ -30,6 +30,8 @@ public class CubeSpawner : GenericSpawner<Cube>
 
     protected override void Spawn(Cube cube)
     {
+        base.Spawn(cube);
+
         float positionX = UnityEngine.Random.Range(_minCoordinateX, _maxCoordinateX);
         float positionZ = UnityEngine.Random.Range(_minCoordinateZ, _maxCoordinateZ);
 
