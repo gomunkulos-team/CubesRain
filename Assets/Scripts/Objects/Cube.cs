@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(Renderer))]
+[RequireComponent(typeof(Rigidbody))]
+
 public class Cube : MonoBehaviour
 {
     private Renderer _renderer;
@@ -10,8 +13,8 @@ public class Cube : MonoBehaviour
     private float _minLifeTime = 2;
     private float _maxLifeTime = 5;
 
-    public event Action<Cube> CubeTouchedPlatform;
-    public event Action<Cube> CubeTimeIsOver;
+    public event Action<Cube> TouchedPlatform;
+    public event Action<Cube> TimeIsOver;
 
     private void Awake()
     {
@@ -31,7 +34,7 @@ public class Cube : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent<Platform>(out _))
         {
-            CubeTouchedPlatform?.Invoke(this);
+            TouchedPlatform?.Invoke(this);
             StartCoroutine(StartDeathCount());
         }
     }
@@ -40,6 +43,6 @@ public class Cube : MonoBehaviour
     {
         float lifeTime = UnityEngine.Random.Range(_minLifeTime, _maxLifeTime);
         yield return new WaitForSeconds(lifeTime);
-        CubeTimeIsOver?.Invoke(this);
+        TimeIsOver?.Invoke(this);
     }
 }

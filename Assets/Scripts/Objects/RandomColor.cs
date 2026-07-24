@@ -13,12 +13,12 @@ public class RandomColor : MonoBehaviour
 
     public void OnEnable()
     {
-        _cube.CubeTouchedPlatform += ChangeColor;
+        _cube.TouchedPlatform += ChangeColor;
     }
 
     public void OnDisable()
     {
-        _cube.CubeTouchedPlatform -= ChangeColor;
+        _cube.TouchedPlatform -= ChangeColor;
     }
 
     private void ChangeColor(Cube cube)
@@ -26,7 +26,7 @@ public class RandomColor : MonoBehaviour
         if (cube.TryGetComponent(out Renderer cubeRenderer))
         {
             cubeRenderer.material.color = Random.ColorHSV(0f, 1f, 0.7f, 1f, 0.7f, 1f);
-            _cube.CubeTouchedPlatform -= ChangeColor;
+            _cube.TouchedPlatform -= ChangeColor;
         }
     }
 }

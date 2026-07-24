@@ -39,12 +39,12 @@ public class CubeSpawner : GenericSpawner<Cube>
 
         cube.transform.position = position;
         cube.gameObject.SetActive(true);
-        cube.CubeTimeIsOver += ReleaseCube;
+        cube.TimeIsOver += ReleaseCube;
     }
 
     private void ReleaseCube(Cube cube)
     {
-        cube.CubeTimeIsOver -= ReleaseCube;
+        cube.TimeIsOver -= ReleaseCube;
         GetCubePosition(cube);
         Release(cube);
     }

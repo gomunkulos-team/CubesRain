@@ -48,7 +48,7 @@ public class GenericSpawner<T> : EventForSpawners where T : MonoBehaviour
         _pool.Get();
     }
 
-    protected void SetPosition(T @object, Vector3 position)
+    protected void ResetPosition(T @object, Vector3 position)
     {
         @object.transform.position = position;
     }
