@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SpawnerInterface : MonoBehaviour
 {
-    [SerializeField] private EventForSpawners _spawner;
+    [SerializeField] private BaseSpawner _spawner;
 
     [SerializeField] private TextMeshProUGUI _numberAllTimeSpawn;
     [SerializeField] private TextMeshProUGUI _numberObjectsCreated;

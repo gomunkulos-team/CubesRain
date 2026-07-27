@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class GenericSpawner<T> : EventForSpawners where T : MonoBehaviour
+public class GenericSpawner<T> : BaseSpawner where T : MonoBehaviour
 {
     [SerializeField] private T _prefab;
 

@@ -6,12 +6,12 @@ public class BombSpawner : GenericSpawner<Bomb>
 
     private void OnEnable()
     {
-        _cubeSpawner.CubeReleased += SetPosition;
+        _cubeSpawner.CubeReleased += SpawnBomb;
     }
 
     private void OnDisable()
     {
-        _cubeSpawner.CubeReleased -= SetPosition;
+        _cubeSpawner.CubeReleased -= SpawnBomb;
     }
 
     protected override void Spawn(Bomb bomb)
@@ -20,7 +20,7 @@ public class BombSpawner : GenericSpawner<Bomb>
         bomb.TimeIsOver += ReleaseBomb;
     }
 
-    private void SetPosition(Transform cubePosition)
+    private void SpawnBomb(Transform cubePosition)
     {
         Bomb bomb = GetObject();
         bomb.transform.position = cubePosition.position;
